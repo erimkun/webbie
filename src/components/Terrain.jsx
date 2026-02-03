@@ -18,9 +18,32 @@ export default function Terrain() {
       {/* Kameranın hemen altında ve önünde geniş bir yükselti */}
       <Hill position={[0, -2, 45]} scaleVec={[60, 8, 30]} color="#3d7a32" /> 
       
-      {/* 3. SOL TARAF (WATER SIDE) - Sahile doğru iniş */}
+      {/* 3. SAHİL & KUMSAL ALANI (YENİLENMİŞ) */}
+      {/* Su Konumu: x=-38, z=15, radius=18. Kıyı şeridi yaklaşık x=-20 civarındadır. */}
+      {/* Bu yüzden kumsalı x=-20 civarına yerleştiriyoruz ki suyla karayı birleştirsin */}
+      <group position={[-20, 0.4, 15]}>
+        {/* Ana Sahil Dairesi - Karadan suya doğru uzanan */}
+        
+        
+        {/* İkinci Sahil Parçası - Biraz daha sağda ve yukarıda */}
+        <mesh rotation={[-Math.PI / 2, -0.15, 0.5]} position={[-10, 0.5, 3.3]} receiveShadow>
+          <circleGeometry args={[12, 64]} />
+          <meshStandardMaterial color="#e0cda5" roughness={1} flatShading />
+        </mesh>
+        <mesh rotation={[-Math.PI / 2, -0.15, 0.5]} position={[-10, 0.5, 16]} receiveShadow>
+          <circleGeometry args={[18, 64]} />
+          <meshStandardMaterial color="#e0cda5" roughness={1} flatShading />
+        </mesh>
+        <mesh rotation={[-Math.PI / 2.2, 0, 0]} position={[-18, 0.5, 3]} receiveShadow>
+          <circleGeometry args={[18, 64]} />
+          <meshStandardMaterial color="#e0cda5" roughness={1} flatShading />
+        </mesh>
+
+      </group>
+
+      {/* 3.1 SOL TARAF (WATER SIDE) - Sahile doğru iniş */}
       {/* Sol tarafı biraz daha alçak tutuyoruz ama tepelerle destekliyoruz */}
-      <Hill position={[-25, -3, 10]} scaleVec={[30, 5, 30]} color="#4a8c3f" />
+      <Hill position={[-20, -3, 10]} scaleVec={[30, 5, 30]} color="#4a8c3f" />
 
       {/* 4. SAĞ TARAF - Ormanlık alan yükseltisi */}
       <Hill position={[30, -1, 15]} scaleVec={[35, 7, 35]} color="#2d5a27" />
@@ -41,7 +64,7 @@ export default function Terrain() {
       <Hill position={[-15, -0.5, -30]} scaleVec={[20, 3, 20]} color="#66bb6a" />
 
       {/* 6. KUM HAVUZLARI (Bunkers) - Smooth geçişli */}
-      <SandBunker position={[8, 0.2, -5]} rotation={0.5} size={3} />
+      <SandBunker position={[15, 0.2, -5]} rotation={0.5} size={3} />
       <SandBunker position={[-12, 0.1, 15]} rotation={-0.2} size={2} scaleY={2} />
 
       {/* 7. GREEN ALANI (GOLF HEDEFİ) */}
@@ -50,7 +73,7 @@ export default function Terrain() {
         {/* Green Zemini - Çok açık yeşil, pürüzsüz */}
         <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
           <circleGeometry args={[5, 64]} />
-          <meshStandardMaterial color="#719400" roughness={0.25} />
+          <meshStandardMaterial color="#90c060" roughness={0.2} />
         </mesh>
         
         {/* Hole (Delik) */}
@@ -80,13 +103,55 @@ export default function Terrain() {
   )
 }
 
+// Golf Fairway - Şeritli çim görünümü
+function GolfFairway() {
+  const stripes = useMemo(() => {
+    const result = []
+    // Geniş fairway şeritleri
+    for (let i = 0; i < 18; i++) {
+      const zPos = 45 - i * 5
+      const isLight = i % 2 === 0
+      // Genişlik ortalarda daha fazla
+      const baseWidth = 22
+      const widthVariation = Math.sin((i / 18) * Math.PI) * 10
+      result.push({
+        position: [3, 0.2 + i * 0.003, zPos],
+        width: baseWidth + widthVariation,
+        length: 5.2,
+        color: isLight ? '#5cb85c' : '#449944'
+      })
+    }
+    return result
+  }, [])
+  
+  return (
+    <group>
+      {stripes.map((stripe, i) => (
+        <mesh 
+          key={i} 
+          rotation={[-Math.PI / 2, 0, 0]} 
+          position={stripe.position}
+          receiveShadow
+        >
+          <planeGeometry args={[stripe.width, stripe.length]} />
+          <meshStandardMaterial 
+            color={stripe.color} 
+            roughness={0.65}
+          />
+        </mesh>
+      ))}
+    </group>
+  )
+}
+
 // Tepe Bileşeni: Basık küre kullanarak yumuşak tepe oluşturur
 function Hill({ position, scaleVec, color = "#3d7a32" }) {
   return (
     <mesh position={position} scale={scaleVec} receiveShadow castShadow>
-      {/* Yarım küre: thetaLength = Math.PI (tam küre yerine yarım da olabilir ama ölçeklendirme ile oynuyoruz) */}
-      <sphereGeometry args={[1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
-      <meshStandardMaterial color={color} roughness={0.8} />
+      {/* Low-poly görünüm için segment sayısını düşürdük */}
+      <sphereGeometry args={[1, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2]} />
+      {/* Flat shading ile daha stilize ve az "düz renk" görünümü */}
+      <meshStandardMaterial color={color} roughness={0.8} flatShading />
     </mesh>
   )
 }
@@ -98,13 +163,13 @@ function SandBunker({ position, rotation = 0, size = 3, scaleY = 1 }) {
       {/* Ana kum alanı */}
       <mesh receiveShadow>
         <circleGeometry args={[size, 64]} />
-        <meshStandardMaterial color="#e6c547" roughness={1} />
+        <meshStandardMaterial color="#e8d9a0" roughness={1} />
       </mesh>
       {/* Kenar geçiş halkası - koyu yeşile doğru */}
       <mesh position={[0, 0, -0.01]}>
         <ringGeometry args={[size * 0.85, size * 1.15, 64]} />
         <meshStandardMaterial 
-          color="#8fa84a" 
+          color="#a0c870" 
           roughness={0.9} 
           transparent 
           opacity={0.7}

@@ -257,7 +257,7 @@ function PalmTree({ position, scale, rotation, lean = 0.1, seed = 0 }) {
               {/* Ana yaprak dalı */}
               <mesh position={[0, 0, leaf.leafLength / 2]} castShadow>
                 <boxGeometry args={[0.12, 0.06, leaf.leafLength]} />
-                <meshStandardMaterial color="#2d5a1e" roughness={0.7} />
+                <meshStandardMaterial color="#4a7d5a" roughness={0.7} />
               </mesh>
               {/* Yaprak segmentleri - daha büyük ve belirgin */}
               {[...Array(14)].map((_, j) => (
@@ -272,7 +272,7 @@ function PalmTree({ position, scale, rotation, lean = 0.1, seed = 0 }) {
                   castShadow
                 >
                   <boxGeometry args={[0.9, 0.03, 0.2]} />
-                  <meshStandardMaterial color="#4a9a3e" roughness={0.6} />
+                  <meshStandardMaterial color="#6aad7a" roughness={0.6} />
                 </mesh>
               ))}
             </group>
@@ -285,7 +285,7 @@ function PalmTree({ position, scale, rotation, lean = 0.1, seed = 0 }) {
             <group key={`top-${i}`} rotation={[0.2, leaf.angle, 0]}>
               <mesh position={[0, 0, 2]} castShadow>
                 <boxGeometry args={[0.1, 0.05, 4]} />
-                <meshStandardMaterial color="#3d7a2e" roughness={0.7} />
+                <meshStandardMaterial color="#5a8d6a" roughness={0.7} />
               </mesh>
               {[...Array(10)].map((_, j) => (
                 <mesh
@@ -299,7 +299,7 @@ function PalmTree({ position, scale, rotation, lean = 0.1, seed = 0 }) {
                   castShadow
                 >
                   <boxGeometry args={[0.7, 0.025, 0.18]} />
-                  <meshStandardMaterial color="#5aaa4e" roughness={0.6} />
+                  <meshStandardMaterial color="#7ab98a" roughness={0.6} />
                 </mesh>
               ))}
             </group>
@@ -309,7 +309,7 @@ function PalmTree({ position, scale, rotation, lean = 0.1, seed = 0 }) {
         {/* Merkez - tomurcuk alanı */}
         <mesh position={[0, 0.5, 0]} castShadow>
           <sphereGeometry args={[0.5, 8, 6]} />
-          <meshStandardMaterial color="#4a8a3a" roughness={0.8} />
+          <meshStandardMaterial color="#6a9d7a" roughness={0.8} />
         </mesh>
       </group>
     </group>
@@ -323,29 +323,29 @@ function PineTree({ position, scale, rotation }) {
       {/* Gövde */}
       <mesh position={[0, 2, 0]} castShadow>
         <cylinderGeometry args={[0.2, 0.35, 4, 8]} />
-        <meshStandardMaterial color="#3d2817" roughness={0.95} />
+        <meshStandardMaterial color="#5c4033" roughness={0.9} />
       </mesh>
       
-      {/* Yaprak katmanları - daha koyu ve yoğun */}
+      {/* Yaprak katmanları - pastel yeşil tonlar */}
       <mesh position={[0, 3.5, 0]} castShadow>
         <coneGeometry args={[2.5, 3.5, 8]} />
-        <meshStandardMaterial color="#1a3d1f" roughness={0.85} />
+        <meshStandardMaterial color="#3d6b4f" roughness={0.8} />
       </mesh>
       <mesh position={[0, 5.5, 0]} castShadow>
         <coneGeometry args={[2, 3, 8]} />
-        <meshStandardMaterial color="#1e4a24" roughness={0.85} />
+        <meshStandardMaterial color="#4a7d5a" roughness={0.8} />
       </mesh>
       <mesh position={[0, 7.2, 0]} castShadow>
         <coneGeometry args={[1.4, 2.5, 8]} />
-        <meshStandardMaterial color="#235a2a" roughness={0.85} />
+        <meshStandardMaterial color="#5a8d6a" roughness={0.8} />
       </mesh>
       <mesh position={[0, 8.6, 0]} castShadow>
         <coneGeometry args={[0.8, 2, 8]} />
-        <meshStandardMaterial color="#2a6a32" roughness={0.85} />
+        <meshStandardMaterial color="#6a9d7a" roughness={0.8} />
       </mesh>
       <mesh position={[0, 9.7, 0]} castShadow>
         <coneGeometry args={[0.4, 1.2, 6]} />
-        <meshStandardMaterial color="#2d7a35" roughness={0.85} />
+        <meshStandardMaterial color="#7aad8a" roughness={0.8} />
       </mesh>
     </group>
   )
@@ -355,9 +355,9 @@ function PineTree({ position, scale, rotation }) {
 function DeciduousTree({ position, scale, rotation, variant = 0 }) {
   const colors = useMemo(() => {
     const colorSets = [
-      { main: '#2d8a3a', light: '#3d9a4a', dark: '#1d7a2a' },
-      { main: '#3a9a45', light: '#4aaa55', dark: '#2a8a35' },
-      { main: '#35954a', light: '#45a55a', dark: '#25853a' }
+      { main: '#5a9d6a', light: '#7ab98a', dark: '#4a8d5a' },
+      { main: '#6aad7a', light: '#8ac99a', dark: '#5a9d6a' },
+      { main: '#60a870', light: '#80c890', dark: '#509860' }
     ]
     return colorSets[variant % colorSets.length]
   }, [variant])
@@ -380,45 +380,42 @@ function DeciduousTree({ position, scale, rotation, variant = 0 }) {
         <meshStandardMaterial color="#5a4030" roughness={0.95} />
       </mesh>
       
-      {/* Ana yaprak taçı - büyük ve yuvarlak */}
-      <mesh position={[0, 6.5, 0]} castShadow>
-        <sphereGeometry args={[3.5, 16, 14]} />
-        <meshStandardMaterial color={colors.main} roughness={0.75} />
-      </mesh>
-      
-      {/* Üst taç - daha açık */}
-      <mesh position={[0, 8, 0]} castShadow>
-        <sphereGeometry args={[2.5, 14, 12]} />
-        <meshStandardMaterial color={colors.light} roughness={0.75} />
-      </mesh>
-      
-      {/* Yan taç kümeleri - dolgunluk için */}
-      <mesh position={[2, 5.5, 0.5]} castShadow>
-        <sphereGeometry args={[2, 12, 10]} />
-        <meshStandardMaterial color={colors.main} roughness={0.75} />
-      </mesh>
-      <mesh position={[-1.8, 5.8, -0.8]} castShadow>
-        <sphereGeometry args={[2.2, 12, 10]} />
-        <meshStandardMaterial color={colors.dark} roughness={0.75} />
-      </mesh>
-      <mesh position={[0.5, 5.2, -1.5]} castShadow>
-        <sphereGeometry args={[1.8, 12, 10]} />
-        <meshStandardMaterial color={colors.main} roughness={0.75} />
-      </mesh>
-      <mesh position={[-0.8, 5, 1.8]} castShadow>
-        <sphereGeometry args={[1.9, 12, 10]} />
-        <meshStandardMaterial color={colors.light} roughness={0.75} />
-      </mesh>
-      <mesh position={[1.5, 6.8, -0.5]} castShadow>
-        <sphereGeometry args={[1.5, 10, 8]} />
-        <meshStandardMaterial color={colors.light} roughness={0.75} />
-      </mesh>
-      
-      {/* Gölge için alt detay */}
-      <mesh position={[0, 4.2, 0]} castShadow>
-        <sphereGeometry args={[2.8, 12, 10]} />
-        <meshStandardMaterial color={colors.dark} roughness={0.8} />
-      </mesh>
+      {/* Ana yaprak taçı - Dodecahedron (Low Poly Tarzı) */}
+      {/* "Çarık yuvarlaklar" probleminden kurtulmak için low-poly stil */}
+      <group position={[0, 6.0, 0]}>
+         {/* Ana kütle */}
+         <mesh castShadow position={[0, 0, 0]} rotation={[0.2, 0.4, 0]}>
+            <dodecahedronGeometry args={[3.0, 0]} />
+            <meshStandardMaterial color={colors.main} roughness={0.9} flatShading />
+         </mesh>
+
+         {/* Üst kısımlar - varyasyon */}
+         <mesh castShadow position={[0, 2.2, 0]} rotation={[0.5, 0.5, 0.2]}>
+            <dodecahedronGeometry args={[2.0, 0]} />
+            <meshStandardMaterial color={colors.light} roughness={0.9} flatShading />
+         </mesh>
+
+         {/* Yan dolgunluklar */}
+         <mesh castShadow position={[1.8, -0.5, 1]} rotation={[0, 0.5, 0.2]}>
+            <dodecahedronGeometry args={[1.5, 0]} />
+            <meshStandardMaterial color={colors.main} roughness={0.9} flatShading />
+         </mesh>
+         
+         <mesh castShadow position={[-1.5, 0.5, -1]} rotation={[0.2, 0, -0.2]}>
+             <dodecahedronGeometry args={[1.8, 0]} />
+             <meshStandardMaterial color={colors.dark} roughness={0.9} flatShading />
+         </mesh>
+
+         <mesh castShadow position={[0, -0.5, 1.8]} rotation={[-0.2, 0.1, 0]}>
+             <dodecahedronGeometry args={[1.6, 0]} />
+             <meshStandardMaterial color={colors.light} roughness={0.9} flatShading />
+         </mesh>
+         
+         <mesh castShadow position={[0.5, 1.0, -1.8]} rotation={[0.1, -0.2, 0]}>
+             <dodecahedronGeometry args={[1.4, 0]} />
+             <meshStandardMaterial color={colors.main} roughness={0.9} flatShading />
+         </mesh>
+      </group>
     </group>
   )
 }

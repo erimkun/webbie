@@ -1,5 +1,5 @@
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
-import { OrbitControls, Sky } from '@react-three/drei'
+import { OrbitControls, Sky, SoftShadows } from '@react-three/drei'
 import { Suspense, createContext, useState, useEffect, useRef, useContext } from 'react'
 import * as THREE from 'three'
 import World from './components/World'
@@ -9,6 +9,7 @@ import Water from './components/Water'
 import Balloons from './components/Balloons'
 import Clouds from './components/Clouds'
 import Character from './components/Character'
+import Fauna from './components/Fauna'
 import ShatterTransition from './components/ShatterTransition'
 
 // Global scroll context - tüm bileşenler erişebilsin
@@ -348,7 +349,7 @@ function SkyBackground() {
       left: 0,
       width: '100vw',
       height: '100vh',
-      background: 'linear-gradient(to bottom, #87CEEB 0%, #b8e0f7 100%)',
+      background: 'linear-gradient(to bottom, #5CA0D3 0%, #F0F8FF 100%)',
       zIndex: 2, // BackgroundPage'in altında
       opacity: isHidden ? 0 : 1,
       transition: 'opacity 0.3s ease',
@@ -404,32 +405,46 @@ export default function App() {
         }}
       >
         <Suspense fallback={null}>
+          {/* Yumuşak Gölgeler - Profesyonel görünüm için */}
+          <SoftShadows size={20} samples={12} focus={0.5} />
+          
           <SceneWrapper>
-            {/* Gökyüzü - mavi ve güneşli */}
+            {/* Gökyüzü - PARLAK GÜNEŞLİ ve NEŞELİ - Daha mavi ve sıcak */}
             <Sky
               distance={450000}
-              sunPosition={[50, 20, 100]}
-              inclination={0.6}
+              sunPosition={[100, 40, 50]}
+              inclination={0.5}
               azimuth={0.25}
-              turbidity={10}
-              rayleigh={0.5}
+              turbidity={8}
+              rayleigh={6}
               mieCoefficient={0.005}
               mieDirectionalG={0.8}
             />
             
-            {/* Ortam aydınlatması */}
-            <ambientLight intensity={0.6} />
-            <hemisphereLight intensity={0.5} color="#87CEEB" groundColor="#2d5a27" />
+            {/* Ortam aydınlatması - SICAK ve PARLAK */}
+            <ambientLight intensity={1.2} color="#fffcf5" />
+            <hemisphereLight intensity={0.8} color="#87CEEB" groundColor="#7cb87c" />
+            
+            {/* Ana güneş ışığı - GÜÇLÜ */}
             <directionalLight
-              position={[50, 100, 50]}
-              intensity={1.8}
+              position={[80, 150, 60]}
+              intensity={2.2}
+              color="#fff8d5"
               castShadow
-              shadow-mapSize={[2048, 2048]}
-              shadow-camera-far={200}
-              shadow-camera-left={-50}
-              shadow-camera-right={50}
-              shadow-camera-top={50}
-              shadow-camera-bottom={-50}
+              shadow-mapSize={[4096, 4096]}
+              shadow-camera-far={250}
+              shadow-camera-left={-80}
+              shadow-camera-right={80}
+              shadow-camera-top={80}
+              shadow-camera-bottom={-80}
+              shadow-bias={-0.0001}
+            />
+            
+            {/* Dolgu ışığı - gölgeleri yumuşatır */}
+            <directionalLight
+              position={[-50, 80, -50]}
+              intensity={0.6}
+              color="#ffeacc"
             />
             
             {/* Dünya bileşenleri */}
@@ -439,6 +454,7 @@ export default function App() {
             <Water />
             <Balloons />
             <Clouds />
+            <Fauna />
             
             {/* Karakter - Golf topunun yanında, scroll ile animasyon */}
             <Character 

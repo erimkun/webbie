@@ -5,17 +5,17 @@ import * as THREE from 'three'
 export default function Clouds() {
   const cloudsData = useMemo(() => {
     const clouds = []
-    for (let i = 0; i < 15; i++) {
-      const angle = (i / 15) * Math.PI * 2
-      const radius = 60 + Math.random() * 30
+    for (let i = 0; i < 12; i++) {
+      const angle = (i / 12) * Math.PI * 2
+      const radius = 70 + Math.random() * 40
       clouds.push({
         position: [
           Math.cos(angle) * radius,
-          25 + Math.random() * 20,
+          30 + Math.random() * 25,
           Math.sin(angle) * radius
         ],
-        scale: 1 + Math.random() * 2,
-        speed: 0.1 + Math.random() * 0.2,
+        scale: 1.5 + Math.random() * 2.5,
+        speed: 0.05 + Math.random() * 0.1,
         offset: Math.random() * 100
       })
     }
@@ -44,15 +44,17 @@ function Cloud({ position, scale, speed, offset, index }) {
     }
   })
 
-  // Bulut parçaları
+  // Bulut parçaları - daha yumuşak ve büyük
   const cloudParts = useMemo(() => {
     return [
-      { pos: [0, 0, 0], size: 3 },
-      { pos: [2.5, 0.3, 0], size: 2.5 },
-      { pos: [-2.5, 0.2, 0], size: 2.3 },
-      { pos: [1, 0.5, 1], size: 2 },
-      { pos: [-1, 0.4, -1], size: 2.2 },
-      { pos: [0, 0.6, 1.5], size: 1.8 },
+      { pos: [0, 0, 0], size: 4 },
+      { pos: [3.5, 0.4, 0], size: 3.2 },
+      { pos: [-3.5, 0.3, 0], size: 3.0 },
+      { pos: [1.5, 0.7, 1.5], size: 2.8 },
+      { pos: [-1.5, 0.5, -1.5], size: 2.6 },
+      { pos: [0, 0.8, 2], size: 2.4 },
+      { pos: [2.5, 0.3, -1], size: 2.2 },
+      { pos: [-2, 0.6, 1], size: 2.0 },
     ]
   }, [])
 
@@ -60,13 +62,14 @@ function Cloud({ position, scale, speed, offset, index }) {
     <group ref={groupRef} position={position} scale={scale}>
       {cloudParts.map((part, i) => (
         <mesh key={i} position={part.pos}>
-          <sphereGeometry args={[part.size, 12, 8]} />
+          <sphereGeometry args={[part.size, 16, 12]} />
           <meshStandardMaterial
             color="#ffffff"
             roughness={1}
             metalness={0}
             transparent
-            opacity={0.9}
+            opacity={0.85}
+            depthWrite={false}
           />
         </mesh>
       ))}
